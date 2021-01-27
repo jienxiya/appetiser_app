@@ -10,12 +10,12 @@ This project is simple Registration and Login Page.
 Project is created with:
 * Vuejs: 2.6.12
 	
-## Setup
+## Project Setup
 To run this project, install it locally using npm:
 
 ```
 $ clone this repository
-$ cd ../appetiser_app
+$ cd appetiser_app
 $ npm install
 $ npm run serve
 ```
