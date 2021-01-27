@@ -1,24 +1,23 @@
-# appetiser_app
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Project Setup](#project-setup)
 
-## Project setup
-```
-npm install
-```
+## General info
+This project is simple Registration and Login Page.
+	
+## Technologies
+Project is created with:
+* Vuejs: 2.6.12
+	
+## Setup
+To run this project, install it locally using npm:
 
-### Compiles and hot-reloads for development
 ```
-npm run serve
+$ clone this repository
+$ cd ../appetiser_app
+$ npm install
+$ npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
