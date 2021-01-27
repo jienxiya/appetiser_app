@@ -1,4 +1,4 @@
-# appetiser_exam
+# appetiser_app
 
 ## Project setup
 ```
