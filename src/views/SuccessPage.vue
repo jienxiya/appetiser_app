@@ -46,7 +46,6 @@ export default {
 }
 span {
   text-transform: lowercase;
-  /* font-size: 15px; */
 }
 span:first-letter {
   text-transform: capitalize;

@@ -17,6 +17,9 @@
           </div>
           <v-card id="regCard" class="mx-auto" max-width="430">
             <div id="form">
+              <div v-show="isError === true" style="background-color: #ff9999; padding:5px; margin-bottom:4px;">
+                <span style="color: red">{{error_message}}</span>
+              </div>
               <label for="email">
                 Email address
                 <span style="color:red">*</span>
@@ -39,10 +42,12 @@
                 <span style="color:red">*</span>
               </label>
               <v-text-field
-                type="password"
                 name="password"
                 label="Password"
                 v-model="password"
+                :append-icon="valuePass ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append="() => (valuePass = !valuePass)"
+                :type="valuePass ? 'password' : 'text'"
                 outlined
                 dense
               ></v-text-field>
@@ -51,10 +56,12 @@
                 <span style="color:red">*</span>
               </label>
               <v-text-field
-                type="password"
                 name="confirmPassword"
                 label="Confirm Password"
                 v-model="password_confirmation"
+                :append-icon="valuePass_confirm ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append="() => (valuePass_confirm = !valuePass_confirm)"
+                :type="valuePass_confirm ? 'password' : 'text'"
                 outlined
                 dense
               ></v-text-field>
@@ -70,7 +77,6 @@
 </template>
 <script>
 import axios from "axios";
-// import swal from "sweetalert2";
 export default {
   name: "RegistrationPage",
   data() {
@@ -78,7 +84,11 @@ export default {
       email: "",
       full_name: "",
       password: "",
-      password_confirmation: ""
+      password_confirmation: "",
+      valuePass: true,
+      valuePass_confirm: true,
+      error_message: "",
+      isError: false,
     };
   },
   methods: {
@@ -87,7 +97,9 @@ export default {
         email: this.email,
         full_name: this.full_name,
         password: this.password,
-        password_confirmation: this.password_confirmation
+        password_confirmation: this.password_confirmation,
+        error_message: "",
+        isError: false
       };
       axios
         .post(
@@ -95,20 +107,19 @@ export default {
           data
         )
         .then(response => {
-          console.log("response.data.success: ", response.data.success);
           if (response.data.success == true) {
-            console.log(
-              "response.data.data.access_token: ",
-              response.data.data.access_token
-            );
             localStorage.setItem(
               "access_token",
               response.data.data.access_token
             );
+            this.isError = true;
             this.$router.push("verify");
-          } else {
-            console.log('ressss: ', response.message)
           }
+        })
+        .catch(error => {
+          let errorObject = JSON.parse(JSON.stringify(error.response));
+          this.isError = true;
+          this.error_message = errorObject.data.message;
         });
     }
   }
@@ -116,7 +127,6 @@ export default {
 </script>
 <style scoped>
 #regCard {
-  font-family: "Nunito", sans-serif !important;
   padding: 30px;
 }
 a {

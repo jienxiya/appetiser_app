@@ -4,12 +4,23 @@
       <v-col>
         <div>
           <v-card id="loginCard" class="mx-auto" max-width="430">
-            <div id="form">
+            <div v-if="isError !== true" id="form">
               <label for="verification_code">Verification Code</label>
               <v-text-field
                 name="verification_code"
                 label="Verification Code"
                 v-model="verification_code"
+                outlined
+                dense
+              ></v-text-field>
+            </div>
+            <div v-else id="form">
+              <label style="color:red" for="verification_code">{{error_message}}</label>
+              <v-text-field
+                name="verification_code"
+                label="Verification Code"
+                v-model="verification_code"
+                error
                 outlined
                 dense
               ></v-text-field>
@@ -24,12 +35,14 @@
   </v-container>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "VerificationPage",
   data() {
     return {
-      verification_code: ""
+      verification_code: "",
+      error_message: "",
+      isError: false,
     };
   },
   beforeCreate() {
@@ -41,21 +54,28 @@ export default {
     this.config = config;
   },
   methods: {
-    verify(){
+    verify() {
       let data = {
         token: this.verification_code,
         via: "email"
-      }
-      console.log('-->>',this.config)
-      axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/verification/verify', data, this.config)
-      .then(response => {
-        console.log('response: ', response);  
-        console.log('response.data.data.success: ', response.data.success)
-        if(response.data.success === true){
-          this.$router.push('login')
-          localStorage.clear();
-        }
-      })
+      };
+      axios
+        .post(
+          "https://api.baseplate.appetiserdev.tech/api/v1/auth/verification/verify",
+          data,
+          this.config
+        )
+        .then(response => {
+          if (response.data.success === true) {
+            this.$router.push("login");
+            localStorage.clear();
+          }
+        })
+        .catch(error=>{
+          let errorObject = JSON.parse(JSON.stringify(error.response));
+          this.isError = true;
+          this.error_message = errorObject.data.message;
+        });
     }
   }
 };

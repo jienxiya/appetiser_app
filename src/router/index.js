@@ -9,11 +9,11 @@ import SuccessPage from "../views/SuccessPage.vue";
 Vue.use(VueRouter);
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
+  {
+    path: '/',
+    name: "Home",
+    component: RegisterPage
+  },
   {
     path: "/register",
     name: "RegisterPage",
@@ -27,7 +27,7 @@ const routes = [
   {
     path: "/verify",
     name: "VerificationPage",
-    component: VerificationPage
+    component: VerificationPage,
   },
   {
     path: "/success-page",
@@ -37,7 +37,6 @@ const routes = [
       title: "SuccessPage",
       requiresAuth: true
     },
-    // beforeEnter: route_guard
   },
   {
     path: "/about",
@@ -56,29 +55,15 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
-    if (localStorage.getItem("access_token")) {
+    if (localStorage.getItem("isAuthenticated")) {
       next();
     } else {
       next({ path: "login" });
     }
-  } else if (localStorage.getItem("access_token")) {
+  } else if (localStorage.getItem("isAuthenticated")) {
     next({ path: "success-page" });
   }
   next();
 });
-
-// function route_guard(to, from, next) {
-//   var isAuthenticated = false;
-//   if (localStorage.getItem("access_token")) {
-//     isAuthenticated = true;
-//   } else {
-//     isAuthenticated = false;
-//   }
-//   if (isAuthenticated) {
-//     next(); // allow to enter route
-//   } else {
-//     next("/login"); // go to '/login';
-//   }
-// }
 
 export default router;
